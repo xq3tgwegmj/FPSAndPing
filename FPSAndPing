@@ -1,0 +1,43 @@
+local textlab = Instance.new("TextLabel")
+        textlab.Size = UDim2.new(0, 200, 0, 28)
+        textlab.BackgroundTransparency = 1
+        textlab.TextColor3 = Color3.new(1, 1, 1)
+        textlab.TextStrokeTransparency = 0
+        textlab.TextStrokeColor3 = Color3.new(0.24, 0.24, 0.24)
+        textlab.Font = Enum.Font.SourceSans
+        textlab.TextSize = 28
+        textlab.Text = "1 ms"
+        textlab.BackgroundColor3 = Color3.new(0, 0, 0)
+        textlab.Position = UDim2.new(1, -254, 0, -33)
+        textlab.TextXAlignment = Enum.TextXAlignment.Right
+        textlab.BorderSizePixel = 0
+        textlab.Parent = game.CoreGui.RobloxGui
+        spawn(function()
+            repeat
+                wait(1)
+                local ping = tonumber(game:GetService("Stats"):FindFirstChild("PerformanceStats").Ping:GetValue())
+                ping = math.floor(ping)
+                textlab.Text = ping.." ms"
+            until textlab == nil
+        end)
+
+local textlab2 = Instance.new("TextLabel")
+        textlab2.Size = UDim2.new(0, 200, 0, 28)
+        textlab2.BackgroundTransparency = 1
+        textlab2.TextColor3 = Color3.new(1, 1, 1)
+        textlab2.TextStrokeTransparency = 0
+        textlab2.TextStrokeColor3 = Color3.new(0.24, 0.24, 0.24)
+        textlab2.Font = Enum.Font.SourceSans
+        textlab2.TextSize = 28
+        textlab2.Text = "1 ms"
+        textlab2.BackgroundColor3 = Color3.new(0, 0, 0)
+        textlab2.Position = UDim2.new(0.96, -254, 0, -33)
+        textlab2.TextXAlignment = Enum.TextXAlignment.Right
+        textlab2.BorderSizePixel = 0
+        textlab2.Parent = game.CoreGui.RobloxGui
+
+local script = Instance.new('LocalScript', Fps)
+local RunService = game:GetService("RunService")
+RunService.RenderStepped:Connect(function(frame)
+textlab2.Text = (math.round(1/frame).." FPS") 
+end)
