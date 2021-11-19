@@ -1,3 +1,5 @@
+--Toggle - U
+
 getgenv().fpsandping = true
 
 UIS.InputBegan:connect(function(input, processed)
