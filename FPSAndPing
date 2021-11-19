@@ -2,7 +2,7 @@
 
 getgenv().fpsandping = true
 
-UIS.InputBegan:connect(function(input, processed)
+game:GetService("UserInputService").InputBegan:connect(function(input, processed)
 	if not processed then
 		if input.KeyCode == Enum.KeyCode.U then
 			getgenv().fpsandping = not getgenv().fpsandping
