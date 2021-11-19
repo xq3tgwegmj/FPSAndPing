@@ -1,5 +1,13 @@
 getgenv().fpsandping = true
 
+UIS.InputBegan:connect(function(input, processed)
+	if not processed then
+		if input.KeyCode == Enum.KeyCode.U then
+			getgenv().fpsandping = not getgenv().fpsandping
+		end
+	end
+end)
+
 local textlab = Instance.new("TextLabel")
 textlab.Size = UDim2.new(0, 200, 0, 28)
 textlab.BackgroundTransparency = 1
@@ -41,11 +49,17 @@ spawn(function()
                 local ping = tonumber(game:GetService("Stats"):FindFirstChild("PerformanceStats").Ping:GetValue())
                 ping = math.floor(ping)
                 textlab.Text = ping.." ms"
-                textlab2.Text = (math.round(1/frame).." FPS")
         else
                 textlab.Visible = false
                 textlab2.Visible = false
                 repeat wait(.1) until getgenv().fpsandping == true
         end
     until textlab == nil
+end)
+
+local script = Instance.new('LocalScript', Fps)
+local RunService = game:GetService("RunService")
+
+RunService.RenderStepped:Connect(function(frame)
+        textlab2.Text = (math.round(1/frame).." FPS") 
 end)
