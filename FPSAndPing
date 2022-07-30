@@ -1,67 +1,183 @@
 --Toggle - U
 
-getgenv().fpsandping = true
+game:GetService("CoreGui"):WaitForChild("RobloxGui").IgnoreGuiInset = true
+local FPS = Instance.new("TextLabel")
+local UICorner = Instance.new("UICorner")
+FPS.Name = "FPS"
+FPS.Parent = game:GetService("CoreGui"):WaitForChild("RobloxGui")
+FPS.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+FPS.BackgroundTransparency = 0.500
+FPS.Position = UDim2.new(0, 104, 0, 4)
+FPS.Size = UDim2.new(0, 35, 0, 32)
+FPS.Font = Enum.Font.Nunito
+FPS.Text = "<b>360</b>"
+FPS.TextColor3 = Color3.fromRGB(255, 255, 255)
+FPS.TextSize = 18.000
+FPS.TextWrapped = true
+FPS.RichText = true
 
+UICorner.CornerRadius = UDim.new(0, 7)
+UICorner.Parent = FPS
+
+local gui = FPS
+local dragging
+local dragInput
+local dragStart
+local startPos
+local function update2(input)
+	local delta = input.Position - dragStart
+	gui.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+end
+gui.InputBegan:Connect(function(input)
+	if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+		dragging = true
+		dragStart = input.Position
+		startPos = gui.Position
+
+		input.Changed:Connect(function()
+			if input.UserInputState == Enum.UserInputState.End then
+				dragging = false
+			end
+		end)
+	end
+end)
+gui.InputChanged:Connect(function(input)
+	if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+		dragInput = input
+	end
+end)
+game:GetService("UserInputService").InputChanged:Connect(function(input)
+	if input == dragInput and dragging then
+		update2(input)
+	end
+end)
+
+local PING = Instance.new("TextLabel")
+local UICorner_2 = Instance.new("UICorner")
+PING.Name = "PING"
+PING.Parent = game:GetService("CoreGui"):WaitForChild("RobloxGui")
+PING.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+PING.BackgroundTransparency = 0.500
+PING.Position = UDim2.new(0, 151, 0, 4)
+PING.Size = UDim2.new(0, 35, 0, 32)
+PING.Font = Enum.Font.Nunito
+PING.Text = "<b>50</b>"
+PING.TextColor3 = Color3.fromRGB(255, 255, 255)
+PING.TextSize = 18.000
+PING.TextWrapped = true
+PING.RichText = true
+
+UICorner_2.CornerRadius = UDim.new(0, 7)
+UICorner_2.Parent = PING
+
+local gui = PING
+local dragging
+local dragInput
+local dragStart
+local startPos
+local function update2(input)
+	local delta = input.Position - dragStart
+	gui.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+end
+gui.InputBegan:Connect(function(input)
+	if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+		dragging = true
+		dragStart = input.Position
+		startPos = gui.Position
+
+		input.Changed:Connect(function()
+			if input.UserInputState == Enum.UserInputState.End then
+				dragging = false
+			end
+		end)
+	end
+end)
+gui.InputChanged:Connect(function(input)
+	if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+		dragInput = input
+	end
+end)
+game:GetService("UserInputService").InputChanged:Connect(function(input)
+	if input == dragInput and dragging then
+		update2(input)
+	end
+end)
+
+--info
+local Info = Instance.new("TextLabel")
+local UICorner_3 = Instance.new("UICorner")
+local Info_2 = Instance.new("TextLabel")
+local UICorner_4 = Instance.new("UICorner")
+
+Info.Name = "Info"
+Info.Parent = FPS
+Info.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+Info.BackgroundTransparency = 0.500
+Info.Position = UDim2.new(0, -6, 0, 32)
+Info.Size = UDim2.new(0, 47, 0, 20)
+Info.Font = Enum.Font.Nunito
+Info.Text = "FPS"
+Info.TextColor3 = Color3.fromRGB(255, 255, 255)
+Info.TextSize = 18.000
+Info.Visible = false
+
+UICorner_3.CornerRadius = UDim.new(0, 5)
+UICorner_3.Parent = Info
+
+Info_2.Name = "Info"
+Info_2.Parent = PING
+Info_2.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+Info_2.BackgroundTransparency = 0.500
+Info_2.Position = UDim2.new(0, -6, 0, 32)
+Info_2.Size = UDim2.new(0, 47, 0, 20)
+Info_2.Font = Enum.Font.Nunito
+Info_2.Text = "Ping"
+Info_2.TextColor3 = Color3.fromRGB(255, 255, 255)
+Info_2.TextSize = 18.000
+Info_2.Visible = false
+
+UICorner_4.CornerRadius = UDim.new(0, 5)
+UICorner_4.Parent = Info_2
+
+FPS.MouseEnter:Connect(function()
+    FPS.Info.Visible = true
+end)
+FPS.MouseLeave:Connect(function()
+    FPS.Info.Visible = false
+end)
+PING.MouseEnter:Connect(function()
+    PING.Info.Visible = true
+end)
+PING.MouseLeave:Connect(function()
+    PING.Info.Visible = false
+end)
+
+--toggle
 game:GetService("UserInputService").InputBegan:connect(function(input, processed)
 	if not processed then
 		if input.KeyCode == Enum.KeyCode.U then
-			getgenv().fpsandping = not getgenv().fpsandping
+			FPS.Visible = not FPS.Visible
+			PING.Visible = not PING.Visible
 		end
 	end
 end)
 
-local textlab = Instance.new("TextLabel")
-textlab.Size = UDim2.new(0, 200, 0, 28)
-textlab.BackgroundTransparency = 1
-textlab.TextColor3 = Color3.new(1, 1, 1)
-textlab.TextStrokeTransparency = 0
-textlab.TextStrokeColor3 = Color3.new(0.24, 0.24, 0.24)
-textlab.Font = Enum.Font.SourceSans
-textlab.TextSize = 28
-textlab.Text = "1 ms"
-textlab.BackgroundColor3 = Color3.new(0, 0, 0)
-textlab.Position = UDim2.new(1, -254, 0, -33)
-textlab.TextXAlignment = Enum.TextXAlignment.Right
-textlab.BorderSizePixel = 0
-textlab.Parent = game.CoreGui.RobloxGui
-
-local textlab2 = Instance.new("TextLabel")
-textlab2.Size = UDim2.new(0, 200, 0, 28)
-textlab2.BackgroundTransparency = 1
-textlab2.TextColor3 = Color3.new(1, 1, 1)
-textlab2.TextStrokeTransparency = 0
-textlab2.TextStrokeColor3 = Color3.new(0.24, 0.24, 0.24)
-textlab2.Font = Enum.Font.SourceSans
-textlab2.TextSize = 28
-textlab2.Text = "1 ms"
-textlab2.BackgroundColor3 = Color3.new(0, 0, 0)
-textlab2.Position = UDim2.new(0.96, -254, 0, -33)
-textlab2.TextXAlignment = Enum.TextXAlignment.Right
-textlab2.BorderSizePixel = 0
-textlab2.Parent = game.CoreGui.RobloxGui
-        
-local script = Instance.new('LocalScript', Fps)
-        
+--ping
 spawn(function()
     repeat
-        if getgenv().fpsandping then
-                textlab.Visible = true
-                textlab2.Visible = true
-                wait(1)
-                local ping = tonumber(game:GetService("Stats"):FindFirstChild("PerformanceStats").Ping:GetValue())
-                ping = math.floor(ping)
-                textlab.Text = ping.." ms"
-        else
-                textlab.Visible = false
-                textlab2.Visible = false
-                repeat wait(.1) until getgenv().fpsandping == true
-        end
-    until textlab == nil
+        wait(.1)
+        local ping = tonumber(game:GetService("Stats"):FindFirstChild("PerformanceStats").Ping:GetValue())
+        ping = math.floor(ping)
+        PING.Text = "<b>"..ping.."</b>"
+    until PING == nil
 end)
 
-local script = Instance.new('LocalScript', Fps)
-local RunService = game:GetService("RunService")
-
-RunService.RenderStepped:Connect(function(frame)
-        textlab2.Text = (math.round(1/frame).." FPS") 
+--fps
+counter = 0
+game:GetService("RunService").RenderStepped:Connect(function(frame)
+    counter = counter+1
+    if counter%25 ~= 0 then return end
+    frame = (math.round(1/frame))
+    FPS.Text = "<b>"..frame.."</b>"
+    if counter > 100 then counter = 0 end
 end)
