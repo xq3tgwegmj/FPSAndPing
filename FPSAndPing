@@ -1,7 +1,13 @@
---Toggle - U
+--Toggle fps cap - Q
+--Toggle guis - U
+getgenv().fpsCapKey = Enum.KeyCode.Q
+getgenv().fpsUiToggleKey = Enum.KeyCode.U
+
+getgenv().fpsCap = 10000
+pcall(setfpscap, 10000)
 
 game:GetService("CoreGui"):WaitForChild("RobloxGui").IgnoreGuiInset = true
-local FPS = Instance.new("TextLabel")
+local FPS = Instance.new("TextButton")
 local UICorner = Instance.new("UICorner")
 FPS.Name = "FPS"
 FPS.Parent = game:GetService("CoreGui"):WaitForChild("RobloxGui")
@@ -108,6 +114,7 @@ local Info = Instance.new("TextLabel")
 local UICorner_3 = Instance.new("UICorner")
 local Info_2 = Instance.new("TextLabel")
 local UICorner_4 = Instance.new("UICorner")
+local UICorner_5 = Instance.new("UICorner")
 
 Info.Name = "Info"
 Info.Parent = FPS
@@ -139,6 +146,42 @@ Info_2.Visible = false
 UICorner_4.CornerRadius = UDim.new(0, 5)
 UICorner_4.Parent = Info_2
 
+--fps cap input
+local fpsCapInput = Instance.new("TextBox")
+fpsCapInput.Name = "Info"
+fpsCapInput.Parent = FPS
+fpsCapInput.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+fpsCapInput.BackgroundTransparency = 0.500
+fpsCapInput.Position = UDim2.new(0, -6, 0, 32)
+fpsCapInput.Size = UDim2.new(0, 47, 0, 20)
+fpsCapInput.Font = Enum.Font.Nunito
+fpsCapInput.AutomaticSize = Enum.AutomaticSize.X
+fpsCapInput.PlaceholderText = "Enter FPS cap"
+fpsCapInput.TextColor3 = Color3.fromRGB(255, 255, 255)
+fpsCapInput.TextSize = 18.000
+fpsCapInput.Text = ""
+fpsCapInput.Visible = false
+
+UICorner_5.CornerRadius = UDim.new(0, 5)
+UICorner_5.Parent = fpsCapInput
+
+FPS.MouseButton1Click:Connect(function()
+    fpsCapInput.Visible = not fpsCapInput.Visible
+end)
+fpsCapInput.FocusLost:Connect(function(enterPressed, inputThatCausedFocusLost)
+	if enterPressed then
+		if fpsCapInput.Text ~= "" then
+		    if tonumber(fpsCapInput.Text) then
+    			getgenv().fpsCap = tonumber(fpsCapInput.Text)
+    			pcall(setfpscap, tonumber(fpsCapInput.Text))
+    			fpsCapInput.Text = ""
+    			fpsCapInput.Visible = false
+    		end
+		end
+	end
+end)
+
+--info hover
 FPS.MouseEnter:Connect(function()
     FPS.Info.Visible = true
 end)
@@ -152,12 +195,21 @@ PING.MouseLeave:Connect(function()
     PING.Info.Visible = false
 end)
 
---toggle
+--keybinds
 game:GetService("UserInputService").InputBegan:connect(function(input, processed)
 	if not processed then
-		if input.KeyCode == Enum.KeyCode.U then
+	    --toggle guis
+		if input.KeyCode == getgenv().fpsUiToggleKey then
 			FPS.Visible = not FPS.Visible
 			PING.Visible = not PING.Visible
+		elseif input.KeyCode == getgenv().fpsCapKey then
+		    if getgenv().fpsCap <= 60 then
+		        getgenv().fpsCap = 10000
+		        pcall(setfpscap, 10000)
+		    else
+		        getgenv().fpsCap = 60
+		        pcall(setfpscap, 60)
+		    end
 		end
 	end
 end)
@@ -176,7 +228,7 @@ end)
 counter = 0
 game:GetService("RunService").RenderStepped:Connect(function(frame)
     counter = counter+1
-    if counter%25 ~= 0 then return end
+    if counter%200 ~= 0 then return end
     frame = (math.round(1/frame))
     FPS.Text = "<b>"..frame.."</b>"
     if counter > 100 then counter = 0 end
