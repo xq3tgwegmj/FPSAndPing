@@ -214,22 +214,16 @@ game:GetService("UserInputService").InputBegan:connect(function(input, processed
 	end
 end)
 
---ping
-spawn(function()
-    repeat
-        wait(.1)
-        local ping = tonumber(game:GetService("Stats"):FindFirstChild("PerformanceStats").Ping:GetValue())
-        ping = math.floor(ping)
-        PING.Text = "<b>"..ping.."</b>"
-    until PING == nil
+local fps = 0
+local rs = game:GetService("RunService")
+rs.RenderStepped:Connect(function()
+	fps = fps + 1
 end)
 
---fps
-counter = 0
-game:GetService("RunService").RenderStepped:Connect(function(frame)
-    counter = counter+1
-    if counter%200 ~= 0 then return end
-    frame = (math.round(1/frame))
-    FPS.Text = "<b>"..frame.."</b>"
-    if counter > 100 then counter = 0 end
-end)
+while wait(1) do
+    local t = tick()
+    local ping = math.floor(tonumber(game:GetService("Stats"):FindFirstChild("PerformanceStats").Ping:GetValue()))
+	PING.Text = "<b>"..ping.."</b>"
+	FPS.Text = fps
+	fps = 0
+end
